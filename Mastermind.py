@@ -18,7 +18,8 @@ def intro(): #printar startmeddelandet
     Svårare nivå: Det kan finnas upprepningar av en eller flera siffror
     """)
     
-def dif(): #returnerar 1 eller 2 beroende på svar, säker inmatning
+def dif(): 
+    '''returnerar 1 eller 2 beroende på svar, säker inmatning'''
     while True:
         try:
             ans=int(input("Ange önskad nivå: lättare (1), svårare (2) -> "))
@@ -43,7 +44,8 @@ def codeGen(ans): #genererar en kod beroende på om inmatningen är 1 eller 2
             code += str(rand.randint(1,6))
     return code
 
-def giveFeedback(a): #tar emot en gissning (a) och returnerar feedbacken
+def giveFeedback(a): 
+    '''tar emot en gissning (a) och returnerar feedbacken'''
     retStr=[]
     g=list(a)
     codeTemp=list(code)
@@ -57,13 +59,12 @@ def giveFeedback(a): #tar emot en gissning (a) och returnerar feedbacken
             retStr.append("▢")
     return "".join(retStr)
 
-def guessPrint(a): #tar in en gissning (a) och printar loggen för alla gissningar
-    guesses.append(a)
+def guessPrint(guess): 
+    '''tar in en gissning (guess) och printar loggen för alla gissningar'''
+    guesses.append(guess)
     
     #printar loggen och utgår ifrån listan guesses
-    print("""
-Drag #    Drag        Feedback
--------------------------------------------""")
+    print(f"Drag #    Drag        Feedback\n{'-'*43}")
     
     #printar numrerade gissningar
     for i in range(12,0,-1):
