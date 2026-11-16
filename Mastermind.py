@@ -33,15 +33,15 @@ def dif(): #returnerar 1 eller 2 beroende på svar, säker inmatning
 
 def codeGen(ans): #genererar en kod beroende på om inmatningen är 1 eller 2
     num=[1,2,3,4,5,6]
-    codeT=[]
+    code = ""
     for i in range(4): #flyttar ett slumpat index från num till codeT (1)
         if ans==1:
-            r=rand.randint(0,5-i)
-            codeT.append(str(num[r]))
-            num.pop(r)
+            randNum=rand.randint(0,5-i)
+            code+=str(num[randNum])
+            num.pop(randNum)
         elif ans==2: #slumpar fram fyra tal (2)
-            codeT.append(rand.randint(1,6))
-    return "".join(codeT)
+            code += str(rand.randint(1,6))
+    return code
 
 def giveFeedback(a): #tar emot en gissning (a) och returnerar feedbacken
     retStr=[]
@@ -88,7 +88,15 @@ def retry():
         else:
             print("Felaktig inmatning")
 
-
+def CheckGuess(guess):
+    right = len(guess) == 4
+    for char in guess:
+        if not guess.isdigit() or guess.isdigit() and (int(char) < 1 or int(char) > 6):
+                right = False
+    if not right:
+        print("Ogilltig gissning")
+    return right
+    
 intro()
 
 while True:
@@ -100,15 +108,8 @@ while True:
     for i in range(1,13):
         while True:
             right = False
-            guess=input("\nAnge gissning som följd av fyra siffror --> ")
-            
-            if len(guess)==4 and guess.isdigit():
-                for j in guess:
-                    if int(j)<=6 or int(j)>=1:
-                        right = True
-            if right:
-                print("Din gissning är felaktig")
-            else:
+            guess=input("\nAnge gissning som följd av fyra siffror --> ") 
+            if CheckGuess(guess):
                 break
         feedbacks.append(giveFeedback(guess))
         guessPrint(guess)
