@@ -1,6 +1,7 @@
 import random as rand
 
-def intro(): #printar startmeddelandet
+def intro():
+    '''printar startmeddelandet'''
     print("""
     Datorn kommer att slumpa fram en kod på fyra siffror mellan 1 och 6.
     Du ska försöka gissa denna kods siffror på max 12 drag.
@@ -21,25 +22,20 @@ def intro(): #printar startmeddelandet
 def dif(): 
     '''returnerar 1 eller 2 beroende på svar, säker inmatning'''
     while True:
-        try:
-            ans=int(input("Ange önskad nivå: lättare (1), svårare (2) -> "))
-            if ans==1:
-                return 1
-            if ans==2:
-                return 2
-            else:
-                print("Ogiltig svårighet")
-        except:
-            print("Felaktig inmatning, skriv en siffra")
+        ans=input("Ange önskad nivå: lättare (1), svårare (2) -> ")
+        if ans=='1' or ans=='2':
+            return int(ans)
+        print("Felaktig inmatning, skriv en siffra")
 
-def codeGen(ans): #genererar en kod beroende på om inmatningen är 1 eller 2
-    num=[1,2,3,4,5,6]
+def codeGen(ans):
+    '''genererar en kod beroende på om inmatningen är 1 eller 2'''
+    num=list(range(1,7))
     code = ""
-    for i in range(4): #flyttar ett slumpat index från num till codeT (1)
-        if ans==1:
-            randNum=rand.randint(0,5-i)
-            code+=str(num[randNum])
-            num.pop(randNum)
+    for i in range(4):
+        if ans==1: #flyttar ett slumpat index från num till codeT (1)
+            randIdx=rand.randint(0,5-i)
+            code+=str(num[randIdx])
+            num.pop(randIdx)
         elif ans==2: #slumpar fram fyra tal (2)
             code += str(rand.randint(1,6))
     return code
@@ -62,12 +58,8 @@ def giveFeedback(a):
 def guessPrint(guess): 
     '''tar in en gissning (guess) och printar loggen för alla gissningar'''
     guesses.append(guess)
-    
-    #printar loggen och utgår ifrån listan guesses
     print(f"Drag #    Drag        Feedback\n{'-'*43}")
-    
-    #printar numrerade gissningar
-    for i in range(12,0,-1):
+    for i in range(12,0,-1): #printar numrerade gissningar
         print(f"\n{i:<8}",end="")
         try:
             print(f"{" ".join(guesses[i-1]):<14}",end="")
@@ -81,21 +73,18 @@ def guessPrint(guess):
 
 def retry():
     while True:
-        om=input("Vill du spela igen (j/n) --> ")
-        if om=="j":
-            return "j"
-        elif om=="n":
-            return "n"
-        else:
-            print("Felaktig inmatning")
+        igen=input("Vill du spela igen (j/n) --> ")
+        if igen=='j' or igen=='n'
+            return igen
+        print("Felaktig inmatning")
 
-def CheckGuess(guess):
+def checkGuess(guess):
     right = len(guess) == 4
     for char in guess:
         if not guess.isdigit() or guess.isdigit() and (int(char) < 1 or int(char) > 6):
                 right = False
     if not right:
-        print("Ogilltig gissning")
+        print("Ogiltig gissning")
     return right
     
 intro()
@@ -110,7 +99,7 @@ while True:
         while True:
             right = False
             guess=input("\nAnge gissning som följd av fyra siffror --> ") 
-            if CheckGuess(guess):
+            if checkGuess(guess):
                 break
         feedbacks.append(giveFeedback(guess))
         guessPrint(guess)
@@ -120,7 +109,7 @@ while True:
             break
     
     if won==0:
-        print(f"Du förlorade. Rätt kod var: {code}")
+        print(f"Du förlorade, rätt kod var: {code}")
     
     if retry()=="j":
         continue
