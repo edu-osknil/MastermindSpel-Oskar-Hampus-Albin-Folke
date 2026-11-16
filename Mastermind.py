@@ -95,21 +95,18 @@ while True:
     won=0
     guesses=[]
     feedbacks=[]
-    
     code=codeGen(dif())
     
     for i in range(1,13):
         while True:
-            fel=0
+            right = False
             guess=input("\nAnge gissning som följd av fyra siffror --> ")
             
             if len(guess)==4 and guess.isdigit():
                 for j in guess:
-                    if int(j)>6 or int(j)<1:
-                        fel=1
-            else:
-                fel=1
-            if fel==1:
+                    if int(j)<=6 or int(j)>=1:
+                        right = True
+            if right:
                 print("Din gissning är felaktig")
             else:
                 break
