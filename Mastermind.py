@@ -1,7 +1,8 @@
 import random as rand
 
 def intro(): #printar startmeddelandet
-    print("""Datorn kommer att slumpa fram en kod på fyra siffror mellan 1 och 6.
+    print("""
+    Datorn kommer att slumpa fram en kod på fyra siffror mellan 1 och 6.
     Du ska försöka gissa denna kods siffror på max 12 drag.
     Efter respektive gissning så kommer du att få en respons:
     För varje gissad korrekt siffra på korrekt plats i koden: ✔
@@ -37,15 +38,14 @@ def codeGen(ans): #genererar en kod beroende på om inmatningen är 1 eller 2
         if ans==1:
             r=rand.randint(0,5-i)
             codeT.append(str(num[r]))
-            num.remove(r+1)
+            num.pop(r)
         elif ans==2: #slumpar fram fyra tal (2)
             codeT.append(rand.randint(1,6))
     return "".join(codeT)
 
-def giveFeedback(a): #tar emot en gissning och returnerar feedbacken
+def giveFeedback(a): #tar emot en gissning (a) och returnerar feedbacken
     retStr=[]
     g=list(a)
-    global code
     codeTemp=list(code)
     for i in range(4):
         if g[i]==code[i]:
@@ -57,8 +57,7 @@ def giveFeedback(a): #tar emot en gissning och returnerar feedbacken
             retStr.append("▢")
     return "".join(retStr)
 
-def guessPrint(a): #tar in en gissning och printar loggen för alla gissningar
-    global guesses
+def guessPrint(a): #tar in en gissning (a) och printar loggen för alla gissningar
     guesses.append(a)
     
     #printar loggen och utgår ifrån listan guesses
@@ -90,46 +89,42 @@ def retry():
             print("Felaktig inmatning")
 
 
-def play():
-    intro()
-    global code
-    global guesses
-    global feedbacks
+intro()
+
+while True:
+    won=0
+    guesses=[]
+    feedbacks=[]
     
-    while True:
-        won=0
-        guesses=[]
-        feedbacks=[]
-        
-        code=codeGen(dif())
-        
-        for i in range(1,13):
-            while True:
-                fel=0
-                guess=input("\nAnge gissning som följd av fyra siffror --> ")
-                
-                if len(guess)==4 and guess.isdigit():
-                    for j in guess:
-                        if int(j)>6 or int(j)<1:
-                            fel=1
-                else:
-                    fel=1
-                if fel==1:
-                    print("Din gissning är felaktig")
-                else:
-                    break
-            feedbacks.append(giveFeedback(guess))
-            guessPrint(guess)
-            if guess==code:
-                print("Du van!")
-                won=1
+    code=codeGen(dif())
+    
+    for i in range(1,13):
+        while True:
+            fel=0
+            guess=input("\nAnge gissning som följd av fyra siffror --> ")
+            
+            if len(guess)==4 and guess.isdigit():
+                for j in guess:
+                    if int(j)>6 or int(j)<1:
+                        fel=1
+            else:
+                fel=1
+            if fel==1:
+                print("Din gissning är felaktig")
+            else:
                 break
+        feedbacks.append(giveFeedback(guess))
+        guessPrint(guess)
+        if guess==code:
+            print("Du van!")
+            won=1
+            break
+    
+    if won==0:
+        print(f"Du förlorade. Rätt kod var: {code}")
+    
+    if retry()=="j":
+        continue
+    break
         
-        if won==0:
-            print(f"Du förlorade. Rätt kod var: {code}")
-        
-        if retry()=="j":
-            continue
-        break
-        
-    print("Play() avslutades")
+print("Programmet avslutades")
