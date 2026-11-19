@@ -74,8 +74,8 @@ def guessPrint(guess):
 def retry():
     while True:
         igen=input("Vill du spela igen (j/n) --> ")
-        if igen=='j' or igen=='n'
-            return igen
+        if igen=='j' or igen=='n':
+            return igen == 'j'
         print("Felaktig inmatning")
 
 def checkGuess(guess):
@@ -111,7 +111,7 @@ while True:
     if won==0:
         print(f"Du förlorade, rätt kod var: {code}")
     
-    if retry()=="j":
+    if retry():
         continue
     break
         
