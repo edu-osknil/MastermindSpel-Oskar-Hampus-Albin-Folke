@@ -43,28 +43,32 @@ def codeGen(ans):
 def giveFeedback(a): 
     '''tar emot en gissning (a) och returnerar feedbacken'''
     retStr=[]
-    g=list(a)
+    guess=list(a)
     codeTemp=list(code)
-    for i in range(4):
-        if g[i]==code[i]:
+    for i in range(4): #kollar om respektive siffra finns i kodens motsvarande plats
+        if guess[i]==code[i]:
             retStr.append("✓")
-            g[i]=0
+            guess[i]=0
             codeTemp[i]=0
-    for i in a:
+    for i in guess: #kollar om respektive siffra finns i koden alls
         if i in codeTemp:
             retStr.append("▢")
+            codeTemp.remove(i)
     return "".join(retStr)
 
 def guessPrint(guess): 
     '''tar in en gissning (guess) och printar loggen för alla gissningar'''
     guesses.append(guess)
     print(f"Drag #    Drag        Feedback\n{'-'*43}")
-    for i in range(12,0,-1): #printar numrerade gissningar
+    for i in range(12,0,-1):
+        #printar nummer
         print(f"\n{i:<8}",end="")
+        #printar gissningar
         try:
             print(f"{" ".join(guesses[i-1]):<14}",end="")
         except IndexError:
             pass
+        #printar feedback
         try:
             print(feedbacks[i-1],end="")
         except IndexError:
@@ -72,13 +76,15 @@ def guessPrint(guess):
         print()
 
 def retry():
+    '''låter spelaren välja om den vill köra igen, säker inmatning'''
     while True:
         igen=input("Vill du spela igen (j/n) --> ")
-        if igen=='j' or igen=='n':
+        if igen.lower()=='j' or igen.lower()=='n':
             return igen == 'j'
         print("Felaktig inmatning")
 
 def checkGuess(guess):
+    '''tar in guess och kollar ifall den uppfyller kraven för en giltig gissning, returnerar boolesk variabel'''
     right = len(guess) == 4
     for char in guess:
         if not guess.isdigit() or guess.isdigit() and (int(char) < 1 or int(char) > 6):
@@ -86,10 +92,13 @@ def checkGuess(guess):
     if not right:
         print("Ogiltig gissning")
     return right
-    
+
+
+#---------- Huvudprogram ----------
 intro()
 
 while True:
+    #deklarerar grundläggande variabler
     won=0
     guesses=[]
     feedbacks=[]
@@ -97,17 +106,19 @@ while True:
     
     for i in range(1,13):
         while True:
+            #tar in gissning
             right = False
             guess=input("\nAnge gissning som följd av fyra siffror --> ") 
             if checkGuess(guess):
                 break
+        #printar ut loggen inkl. senaste gissningen
         feedbacks.append(giveFeedback(guess))
         guessPrint(guess)
+        #kollar om du van
         if guess==code:
             print("Du van!")
             won=1
             break
-    
     if won==0:
         print(f"Du förlorade, rätt kod var: {code}")
     
